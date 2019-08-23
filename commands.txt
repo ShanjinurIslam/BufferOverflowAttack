@@ -1,3 +1,6 @@
+
+sudo sysctl -w kernel.randomize_va_space=0
+
 Executable (from root)
 gcc -o demo -z execstack -fno-stack-protector demo.c
 
@@ -9,4 +12,3 @@ run
 p $ebp
 p &buffer
 quit
-
