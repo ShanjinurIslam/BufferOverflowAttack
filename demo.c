@@ -1,45 +1,31 @@
-/* This program has a buffer overflow vulnerability. */
-
 #include <stdlib.h>
-
 #include <stdio.h>
-
 #include <string.h>
 
-
-
-int foo(char *str)
-
+void matchPassword(FILE* f)
 {
+    char str[400];
 
-	char buffer[100];
+    fseek(f, 0, SEEK_END);
+	long fsize = ftell(f);
+	fseek(f, 0, SEEK_SET);
 
-	/* The following statement has a buffer overflow problem */
-
-	strcpy(buffer, str);
-
-	return 0;
-
+    fread(str, sizeof(char), fsize, f);
+	if(strcmp(str,"password")){
+		printf("Password Matched\n");
+	}
+	else{
+		printf("Wrong password\n");
+	}
 }
 
 
-
 int main(int argc, char **argv)
-
 {
+    FILE *badfile;
+	badfile = fopen("input","r");
 
-	char str[400];
-
-	FILE *badfile;
-
-	badfile = fopen("badfile", "r");
-
-	fread(str, sizeof(char), 300, badfile);
-
-	foo(str);
-
-	printf("Returned Properly\n");
-
-	return 0;
-
+	matchPassword(badfile);
+    printf("You shall not pass\n");
+    return 1;
 }
